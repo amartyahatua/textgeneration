@@ -1,14 +1,14 @@
 import argparse
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.normal import Normal
 import numpy as np
-
 from models import Autoencoder
 from dataset import load
 
+
+# Train the autoencoder
 def train(epoch):
     model.train()
     train_loss = 0.
@@ -32,7 +32,9 @@ def train(epoch):
     print('* (Train) Epoch: {} | Loss: {:.4f}'.format(epoch, train_loss))
     return train_loss
 
+# Train the autoencoder
 if __name__ == '__main__':
+    # Setting parameters
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--epochs', type=int, default=5)
@@ -47,9 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('--interval', type=int, default=10)
     parser.add_argument('--cuda', type=bool, default=torch.cuda.is_available())
     args = parser.parse_args()
-
-    print(args)
-
+    
     torch.manual_seed(args.seed)
     torch.backends.cudnn.deterministic = True
 

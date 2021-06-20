@@ -4,6 +4,8 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
+# Preparing dataset for LaTextGAN
+# Creating Vocab
 class Vocab:
 
     def __init__(self, corpus):
@@ -36,6 +38,7 @@ class Vocab:
         assert len(self.encoding) == len(self.decoding)
         return len(self.encoding)
 
+# Creating Corpus
 class Corpus(Dataset):
     
     def __init__(self, seq_len=20+2):
@@ -71,7 +74,7 @@ class Corpus(Dataset):
     def __getitem__(self, i):
         return torch.from_numpy(self.pad(self.encode(self.reviews[i])))
 
-
+# Loading data
 def load(batch_size, seq_len):
     ds = Corpus(seq_len)
     return (DataLoader(ds, batch_size, shuffle=True), ds.vocab)

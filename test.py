@@ -1,9 +1,12 @@
 import torch
 import torch.nn as nn
 import numpy as np
-
 from models import Autoencoder, Generator
 from dataset import Corpus
+
+#####################
+# Generating data
+#####################
 
 ds = Corpus()
 vocab = ds.vocab

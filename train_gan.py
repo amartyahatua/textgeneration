@@ -1,14 +1,13 @@
 import argparse
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.autograd as autograd
 import numpy as np
-
 from models import Autoencoder, Generator, Critic
 from dataset import load
 
+# Copute gradient penalty
 def compute_grad_penalty(critic, real_data, fake_data):
     B = real_data.size(0)
     alpha = torch.FloatTensor(np.random.random((B, 1)))
@@ -30,10 +29,10 @@ def compute_grad_penalty(critic, real_data, fake_data):
         retain_graph=True,
         only_inputs=True
     )[0]
-    #grads = grads.view(B, -1)
     grad_penalty = ((grads.norm(2, dim=1) - 1.) ** 2).mean()
     return grad_penalty
 
+# Training
 def train(epoch):
     autoencoder.eval()
     generator.train()
@@ -89,6 +88,7 @@ def train(epoch):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    # Setting parameters
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--epochs', type=int, default=15)
     parser.add_argument('--batch-size', type=int, default=32)

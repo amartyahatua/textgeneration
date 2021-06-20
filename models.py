@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+# Autoencoder class
 class Autoencoder(nn.Module):
     
     def __init__(self, enc_hidden_dim, dec_hidden_dim, embedding_dim, 
@@ -17,14 +18,16 @@ class Autoencoder(nn.Module):
         self.fc2 = nn.Linear(latent_dim, dec_hidden_dim)
         self.decoder = nn.LSTM(dec_hidden_dim, dec_hidden_dim)
         self.fc3 = nn.Linear(dec_hidden_dim, vocab_size)
-    
+
+# Encoder function
     def encode(self, x):
         x = self.embedding(x.long()).permute(1,0,2) # [T,B,E]
         _, (hidden, _) = self.encoder(x)
         z = self.fc1(hidden) # [1,B,L]
         z = self.dropout(z)
         return z
-    
+
+# Decoder function
     def decode(self, z):
         z = self.fc2(z) # [1,B,H_dec]
         out, _ = self.decoder(z.repeat(self.seq_len,1,1), (z, z))
@@ -51,6 +54,8 @@ class Block(nn.Module):
     def forward(self, x):
         return self.net(x) + x
 
+
+# Generator class
 class Generator(nn.Module):
     
     def __init__(self, n_layers, block_dim):
@@ -63,6 +68,7 @@ class Generator(nn.Module):
     def forward(self, x):
         return self.net(x)
 
+# Critic or Discriminator class
 class Critic(nn.Module):
     
     def __init__(self, n_layers, block_dim):
